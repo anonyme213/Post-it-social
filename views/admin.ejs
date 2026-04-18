@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Administration</title>
+  <link rel="stylesheet" href="/assets/style.css?v=<%= assetVersion %>" />
+</head>
+<body>
+  <div class="topbar">
+    <h1>Admin</h1>
+    <a href="/">Retour</a>
+  </div>
+
+  <div class="admin-section">
+    <h2>Gestion des utilisateurs</h2>
+    <p>Le compte <strong>guest</strong> représente les utilisateurs non connectés.</p>
+
+    <% if (errors && errors.length) { %>
+      <ul class="errors">
+        <% errors.forEach(function(err) { %>
+          <li><%= err.msg %></li>
+        <% }) %>
+      </ul>
+    <% } %>
+
+    <table class="admin-table">
+      <thead>
+        <tr>
+          <th>Utilisateur</th>
+          <th>Create</th>
+          <th>Edit</th>
+          <th>Delete</th>
+          <th>Admin</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% users.forEach(function(user) { %>
+          <tr>
+            <td>
+              <%= user.username %>
+              <% if (user.username === 'guest') { %>
+                <small>(invité)</small>
+              <% } %>
+            </td>
+
+            <td>
+              <input
+                type="checkbox"
+                name="can_create"
+                value="1"
+                form="form-user-<%= user.id %>"
+                <%= user.can_create ? 'checked' : '' %>
+              />
+            </td>
+
+            <td>
+              <input
+                type="checkbox"
+                name="can_edit"
+                value="1"
+                form="form-user-<%= user.id %>"
+                <%= user.can_edit ? 'checked' : '' %>
+              />
+            </td>
+
+            <td>
+              <input
+                type="checkbox"
+                name="can_delete"
+                value="1"
+                form="form-user-<%= user.id %>"
+                <%= user.can_delete ? 'checked' : '' %>
+              />
+            </td>
+
+            <td>
+              <input
+                type="checkbox"
+                name="is_admin"
+                value="1"
+                form="form-user-<%= user.id %>"
+                <%= user.is_admin ? 'checked' : '' %>
+                <%= user.username === 'guest' ? 'disabled' : '' %>
+              />
+            </td>
+
+            <td style="display: flex; gap: 8px; flex-wrap: wrap;">
+              <form id="form-user-<%= user.id %>" method="POST" action="/admin/update" style="margin: 0;">
+                <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+                <input type="hidden" name="userId" value="<%= user.id %>" />
+                <button type="submit">Enregistrer</button>
+              </form>
+
+              <% if (user.username !== 'guest') { %>
+                <form
+                  method="POST"
+                  action="/admin/delete-user"
+                  style="margin: 0;"
+                  onsubmit="return confirm('Supprimer l’utilisateur <%= user.username %> ? Cette action supprimera aussi ses post-it.')"
+                >
+                  <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+                  <input type="hidden" name="userId" value="<%= user.id %>" />
+                  <button type="submit" class="delete-board-btn">Supprimer</button>
+                </form>
+              <% } %>
+            </td>
+          </tr>
+        <% }); %>
+      </tbody>
+    </table>
+  </div>
+</body>
+</html>

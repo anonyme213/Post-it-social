@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Inscription</title>
+  <link rel="stylesheet" href="/assets/style.css" />
+</head>
+<body class="auth-page">
+  <div class="auth-shell">
+    <div class="auth-box modern-auth-box">
+      <div class="auth-badge">Post-it Social</div>
+      <h1>Inscription</h1>
+      <p class="auth-subtitle">Crée ton compte pour commencer à publier sur les tableaux.</p>
+
+      <% if (errors && errors.length) { %>
+        <ul class="errors">
+          <% errors.forEach(function(err) { %>
+            <li><%= err.msg %></li>
+          <% }) %>
+        </ul>
+      <% } %>
+
+      <form method="POST" action="/signup" class="auth-form">
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+        <input type="hidden" name="next" value="<%= next || '/' %>" />
+
+        <label>
+          Username
+          <input
+            name="username"
+            required
+            maxlength="30"
+            autocomplete="username"
+            placeholder="Choisis un username"
+          />
+        </label>
+
+        <label>
+          Mot de passe
+          <input
+            name="password"
+            type="password"
+            required
+            minlength="8"
+            maxlength="72"
+            autocomplete="new-password"
+            placeholder="Choisis un mot de passe"
+          />
+        </label>
+
+        <label>
+          Confirmez le mot de passe
+          <input
+            name="confirmPassword"
+            type="password"
+            required
+            minlength="8"
+            maxlength="72"
+            autocomplete="new-password"
+            placeholder="Confirme le mot de passe"
+          />
+        </label>
+
+        <button type="submit" class="auth-main-btn">Créer mon compte</button>
+      </form>
+
+      <div class="auth-footer-links">
+        <a href="/">← Retour à l’accueil</a>
+        <a href="/login?next=<%= encodeURIComponent(next || '/') %>">J’ai déjà un compte</a>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

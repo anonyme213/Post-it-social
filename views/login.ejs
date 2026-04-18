@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Connexion</title>
+  <link rel="stylesheet" href="/assets/style.css" />
+</head>
+<body class="auth-page">
+  <div class="auth-shell">
+    <div class="auth-box modern-auth-box">
+      <div class="auth-badge">Post-it Social</div>
+      <h1>Connexion</h1>
+      <p class="auth-subtitle">Connecte-toi pour créer, modifier et gérer tes post-it.</p>
+
+      <% if (errors && errors.length) { %>
+        <ul class="errors">
+          <% errors.forEach(function(err) { %>
+            <li><%= err.msg %></li>
+          <% }) %>
+        </ul>
+      <% } %>
+
+      <form method="POST" action="/login" class="auth-form">
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+        <input type="hidden" name="next" value="<%= next || '/' %>" />
+
+        <label>
+          Username
+          <input
+            name="username"
+            required
+            maxlength="30"
+            autocomplete="username"
+            placeholder="Entre ton username"
+          />
+        </label>
+
+        <label>
+          Mot de passe
+          <input
+            name="password"
+            type="password"
+            required
+            minlength="8"
+            maxlength="72"
+            autocomplete="current-password"
+            placeholder="Entre ton mot de passe"
+          />
+        </label>
+
+        <button type="submit" class="auth-main-btn">Se connecter</button>
+      </form>
+
+      <div class="auth-footer-links">
+        <a href="/">← Retour à l’accueil</a>
+        <a href="/signup?next=<%= encodeURIComponent(next || '/') %>">Créer un compte</a>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

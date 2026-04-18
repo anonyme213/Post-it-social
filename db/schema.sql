@@ -1,0 +1,49 @@
+PRAGMA foreign_keys = ON;
+
+CREATE TABLE IF NOT EXISTS users (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  username TEXT NOT NULL UNIQUE CHECK (length(username) BETWEEN 3 AND 30),
+  password_hash TEXT NOT NULL,
+  can_create INTEGER NOT NULL DEFAULT 1 CHECK (can_create IN (0, 1)),
+  can_edit INTEGER NOT NULL DEFAULT 1 CHECK (can_edit IN (0, 1)),
+  can_delete INTEGER NOT NULL DEFAULT 1 CHECK (can_delete IN (0, 1)),
+  is_admin INTEGER NOT NULL DEFAULT 0 CHECK (is_admin IN (0, 1)),
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS boards (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  slug TEXT NOT NULL UNIQUE CHECK (length(slug) BETWEEN 1 AND 30),
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  creator_id INTEGER,
+  FOREIGN KEY (creator_id) REFERENCES users(id) ON DELETE SET NULL
+);
+
+CREATE TABLE IF NOT EXISTS postits (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  text TEXT NOT NULL CHECK (length(text) BETWEEN 1 AND 500),
+  created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  x REAL NOT NULL,
+  y REAL NOT NULL,
+  board_id INTEGER NOT NULL,
+  author_id INTEGER NOT NULL,
+  image_url TEXT,
+  FOREIGN KEY (board_id) REFERENCES boards(id) ON DELETE CASCADE,
+  FOREIGN KEY (author_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS postit_history (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  postit_id INTEGER NOT NULL,
+  text TEXT,
+  x REAL,
+  y REAL,
+  image_url TEXT,
+  changed_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  changed_by INTEGER NOT NULL,
+  change_type TEXT NOT NULL CHECK (change_type IN ('created', 'updated', 'deleted')),
+  FOREIGN KEY (changed_by) REFERENCES users(id)
+);
+
+CREATE UNIQUE INDEX IF NOT EXISTS idx_boards_slug ON boards(slug);

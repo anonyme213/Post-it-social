@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Déconnexion</title>
+  <link rel="stylesheet" href="/assets/style.css" />
+</head>
+<body class="auth-page">
+  <div class="auth-shell">
+    <div class="auth-box modern-auth-box small-auth-box">
+      <div class="auth-badge">Post-it Social</div>
+      <h1>Déconnexion</h1>
+      <p class="auth-subtitle">Êtes-vous sûr de vouloir vous déconnecter ?</p>
+
+      <div class="logout-actions">
+        <form method="POST" action="/logout" style="margin: 0;">
+          <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+          <button type="submit" class="auth-danger-btn">Déconnexion</button>
+        </form>
+
+        <a href="/" class="auth-secondary-btn">Annuler</a>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

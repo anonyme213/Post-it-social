@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Post-it Social</title>
+  <link rel="stylesheet" href="/assets/style.css?v=<%= assetVersion %>" />
+
+  <meta name="csrf-token" content="<%= csrfToken %>" />
+  <meta name="current-board" content="<%= boardSlug %>" />
+  <meta name="current-board-path" content="<%= boardPath %>" />
+  <meta name="current-user" content="<%= encodeURIComponent(JSON.stringify(currentUser || null)) %>" />
+  <meta name="guest-user" content="<%= encodeURIComponent(JSON.stringify(guestUser || null)) %>" />
+
+  <script src="/socket.io/socket.io.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand-block">
+      <h1>Post-it Social</h1>
+      <div class="board-badge">
+        Tableau :
+        <strong id="boardName"><%= boardSlug === 'general' ? 'général' : boardSlug %></strong>
+      </div>
+    </div>
+
+    <button
+      id="openPostitBtn"
+      class="<%= actorUser && (actorUser.can_create || actorUser.is_admin) ? '' : 'is-hidden' %>"
+      type="button"
+    >
+      ➕ Créer
+    </button>
+
+    <div class="top-actions" id="authStatus">
+      <span>Chargement...</span>
+    </div>
+  </header>
+
+  <section class="board-toolbar">
+    <div class="board-links" id="boardLinks"></div>
+
+    <div class="board-actions">
+      <form id="boardSwitcherForm" class="board-switcher-form">
+        <input
+          id="boardSlugInput"
+          type="text"
+          maxlength="30"
+          pattern="[A-Za-z0-9_-]{1,30}"
+          placeholder="nom du tableau"
+        />
+        <button type="submit">Ouvrir / créer</button>
+      </form>
+
+      <button id="deleteBoardBtn" class="delete-board-btn is-hidden" type="button">
+        🗑 Supprimer ce tableau
+      </button>
+    </div>
+  </section>
+
+  <main id="board" class="board"></main>
+  <div id="message" class="message"></div>
+
+  <div id="postitModal" class="modal hidden" aria-hidden="true">
+    <div class="modal-content" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <h2 id="modalTitle">Nouveau post-it</h2>
+
+      <form id="newPostitForm">
+        <textarea
+          name="text"
+          id="postitText"
+          rows="5"
+          maxlength="500"
+          placeholder="Écris ton post-it ici..."
+          required
+        ></textarea>
+
+        
+        <div class="actions">
+          <button type="button" id="cancelBtn">Annuler</button>
+          <button type="submit" id="submitPostitBtn">Ajouter</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="/assets/script.js?v=<%= assetVersion %>"></script>
+</body>
+</html>

@@ -1,0 +1,56 @@
+{
+  "name": "post-it-social",
+  "version": "1.0.0",
+  "description": "Application sociale de post-it sécurisée",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon app.js",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write .",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:e2e": "playwright test",
+    "security": "snyk test",
+    "benchmark": "jest tests/benchmark.test.js",
+    "test:security": "jest tests/app.test.js -t 'Security Tests'",
+    "pm2:start": "pm2 start ecosystem.config.js --env production",
+    "pm2:stop": "pm2 stop ecosystem.config.js"
+  },
+  "engines": {
+    "node": "20.x"
+  },
+  "dependencies": {
+    "@eslint/js": "^10.0.1",
+    "bcrypt": "^5.1.0",
+    "compression": "^1.7.4",
+    "connect-sqlite3": "^0.9.0",
+    "csurf": "^1.11.0",
+    "dotenv": "^17.4.1",
+    "ejs": "^3.1.9",
+    "eslint": "^10.2.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.5",
+    "express": "^4.18.2",
+    "express-rate-limit": "^6.8.0",
+    "express-session": "^1.17.3",
+    "express-validator": "^6.15.0",
+    "helmet": "^7.0.0",
+    "jest": "^30.3.0",
+    "multer": "^2.1.1",
+    "playwright": "^1.59.1",
+    "prettier": "^3.8.2",
+    "socket.io": "^4.8.3",
+    "sqlite3": "^5.1.6",
+    "supertest": "^7.2.2",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1",
+    "winston": "^3.19.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1",
+    "pm2": "^5.3.0",
+    "snyk": "^1.1291.1"
+  }
+}
